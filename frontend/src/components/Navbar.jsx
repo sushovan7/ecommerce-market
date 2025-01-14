@@ -47,7 +47,7 @@ function Navbar() {
           />
         </div>
         <div className="cursor-pointer group relative ">
-          {!isLoggedIn ? (
+          {isLoggedIn ? (
             <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black text-white ">
               S
             </div>

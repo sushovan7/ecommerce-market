@@ -14,7 +14,6 @@ function ShopContextProvider(props) {
   const currencyType = "$";
   const shippingFee = 10;
   const [totalProductPrice, setTotalProductPrice] = useState(0);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [cartItems, setCartItems] = useState(() => {
@@ -25,6 +24,15 @@ function ShopContextProvider(props) {
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
 
@@ -82,18 +90,20 @@ function ShopContextProvider(props) {
   }
 
   async function handleLogout() {
+    const token = localStorage.getItem("token") || "";
     try {
       const response = await axios.get(
         `http://localhost:3000/api/v1/auth/logout`,
-        {},
         {
-          withCredentials: true,
+          headers: {
+            token: token,
+          },
         }
       );
-
+      console.log(response);
       if (response.data.success) {
         toast.success("Logout successful");
-        navigate("/login");
+        navigate("/");
         setIsLoggedIn(false);
       }
     } catch (error) {

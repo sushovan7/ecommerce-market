@@ -33,7 +33,10 @@ function Login() {
           password,
         }
       );
+      console.log(response);
       if (response.data.success) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("isLoggedIn", false);
         toast.success("User loggedin successfully");
         setIsLoggedIn(true);
         navigate("/");
