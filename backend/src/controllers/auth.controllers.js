@@ -6,7 +6,7 @@ import {
   verifyEmail,
   resetPasswordOtp,
 } from "../utils/emailTemplates.js";
-import { generateAccessTokenAndRefreshToken } from "../utils/generateAccessTokenAndRefreshToken.js";
+import { generateToken } from "../utils/generateToken.js";
 
 export async function signup(req, res) {
   const { fullname, email, password } = req.body;
@@ -103,28 +103,23 @@ export async function signin(req, res) {
       });
     }
 
-    const { refreshToken, accessToken } =
-      await generateAccessTokenAndRefreshToken(user._id);
+    const { token } = await generateToken(user._id);
 
-    const loggedInUser = await userModel
-      .findOne(user._id)
-      .select("-refreshToken -password");
+    const loggedInUser = await userModel.findOne(user._id).select("-password");
 
-    return res
-      .status(200)
-      .cookie("accessToken", accessToken, {
-        httpOnly: true,
-        sameSite: "Strict",
-      })
-      .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: "Strict",
-      })
-      .json({
-        success: true,
-        message: "User loggedIn successfully",
-        user: loggedInUser,
-      });
+    return (
+      res
+        .status(200)
+        // .cookie("token", token, {
+        //   httpOnly: true,
+        // })
+        .json({
+          success: true,
+          message: "User loggedIn successfully",
+          user: loggedInUser,
+          token: token,
+        })
+    );
   } catch (error) {
     console.log("error while Sign In", error);
     return res.status(500).json({
@@ -143,34 +138,14 @@ export async function logout(req, res) {
       });
     }
 
-    const updatedUser = await userModel
-      .findByIdAndUpdate(
-        req.user._id,
-        {
-          $set: {
-            refreshToken: null,
-          },
-        },
-        {
-          new: true,
-        }
-      )
-      .select("-password -refreshToken");
-
     return res
       .status(200)
-      .clearCookie("accessToken", {
+      .clearCookie("token", {
         httpOnly: true,
-        sameSite: "Strict",
-      })
-      .clearCookie("refreshToken", {
-        httpOnly: true,
-        sameSite: "Strict",
       })
       .json({
         success: true,
         message: "User logged out successfully",
-        user: updatedUser,
       });
   } catch (error) {
     console.error(error);
@@ -182,65 +157,65 @@ export async function logout(req, res) {
   }
 }
 
-export async function refreshAccessToken(req, res) {
-  const incomingRefreshToken =
-    req.cookies?.refreshToken || req.body.refreshToken;
+// export async function refreshAccessToken(req, res) {
+//   const incomingRefreshToken =
+//     req.cookies?.refreshToken || req.body.refreshToken;
 
-  if (!incomingRefreshToken) {
-    return res.satus(400).json({
-      success: false,
-      message: "unauthorized request",
-    });
-  }
-  try {
-    const decodeToken = jwt.verify(
-      incomingRefreshToken,
-      process.env.REFRESH_TOKEN_SECRET
-    );
+//   if (!incomingRefreshToken) {
+//     return res.satus(400).json({
+//       success: false,
+//       message: "unauthorized request",
+//     });
+//   }
+//   try {
+//     const decodeToken = jwt.verify(
+//       incomingRefreshToken,
+//       process.env.REFRESH_TOKEN_SECRET
+//     );
 
-    const user = await userModel.findById(decodeToken?._id);
+//     const user = await userModel.findById(decodeToken?._id);
 
-    if (!user) {
-      return res.satus(400).json({
-        success: false,
-        message: "invalid refresh token",
-      });
-    }
+//     if (!user) {
+//       return res.satus(400).json({
+//         success: false,
+//         message: "invalid refresh token",
+//       });
+//     }
 
-    if (incomingRefreshToken !== user?.refreshToken) {
-      return res.satus(400).json({
-        success: false,
-        message: "refresh token is expired or used",
-      });
-    }
+//     if (incomingRefreshToken !== user?.refreshToken) {
+//       return res.satus(400).json({
+//         success: false,
+//         message: "refresh token is expired or used",
+//       });
+//     }
 
-    const { accessToken, newrefreshToken } =
-      await generateAccessTokenAndRefreshToken(user._id);
+//     const { accessToken, newrefreshToken } =
+//       await generateAccessTokenAndRefreshToken(user._id);
 
-    return res
-      .status(200)
-      .cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: true,
-      })
-      .cookie("refreshToken", newrefreshToken, {
-        httpOnly: true,
-        secure: true,
-      })
-      .json(
-        new ApiResponse(
-          200,
-          {
-            accessToken,
-            refreshToken: newrefreshToken,
-          },
-          "Access token refreshed"
-        )
-      );
-  } catch (error) {
-    throw new ApiError(401, error?.message || "Invalid refresh token");
-  }
-}
+//     return res
+//       .status(200)
+//       .cookie("accessToken", accessToken, {
+//         httpOnly: true,
+//         secure: true,
+//       })
+//       .cookie("refreshToken", newrefreshToken, {
+//         httpOnly: true,
+//         secure: true,
+//       })
+//       .json(
+//         new ApiResponse(
+//           200,
+//           {
+//             accessToken,
+//             refreshToken: newrefreshToken,
+//           },
+//           "Access token refreshed"
+//         )
+//       );
+//   } catch (error) {
+//     throw new ApiError(401, error?.message || "Invalid refresh token");
+//   }
+// }
 
 export async function verifyUserEmail(req, res) {
   const { userId, otp } = req.body;

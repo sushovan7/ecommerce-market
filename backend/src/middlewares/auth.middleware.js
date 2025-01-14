@@ -4,11 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export async function auth(req, res, next) {
-  const token =
-    req.headers?.accessToken ||
-    req.headers["Authorization"]?.replace("Bearer ", "");
-  console.log(JSON.stringify(req.cookies));
-  console.log(req.headers["Authorization"]?.replace("Bearer ", ""));
+  const token = req.headers?.token;
 
   if (!token) {
     return res.status(400).json({
@@ -16,12 +12,12 @@ export async function auth(req, res, next) {
       message: "Unauthorized request",
     });
   }
-  const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
   try {
     const user = await userModel
       .findById(decodedToken?._id)
-      .select("-password -refreshToken");
+      .select("-password");
     if (!user) {
       return res.status(400).json({
         success: false,
