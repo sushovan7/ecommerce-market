@@ -19,9 +19,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    refreshToken: {
-      type: String,
-    },
+
     lastLogin: {
       type: String,
       default: new Date().toLocaleDateString(),
@@ -38,8 +36,12 @@ const userSchema = new mongoose.Schema(
     resetPasswordExpiresAt: {
       type: Date,
     },
+    cartData: {
+      type: Object,
+      default: {},
+    },
   },
-  { timestamps: true }
+  { timestamps: true, minimize: false }
 );
 
 export const userModel = mongoose.model("User", userSchema);

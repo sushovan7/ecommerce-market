@@ -5,7 +5,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { urlencoded } from "express";
 import { connectDb } from "./DB/db.js";
-import { authRouter } from "./routes/auth.routes.js";
+import { userRouter } from "./routes/user.routes.js";
+import { productRouter } from "./routes/product.routes.js";
 
 const app = express();
 
@@ -23,10 +24,10 @@ app.use(
 );
 
 app.use(cookieParser());
-
 app.use(urlencoded({ extended: true, limit: "50mb" }));
 
-app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/product", productRouter);
 
 connectDb()
   .then(() => {
