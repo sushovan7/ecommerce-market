@@ -138,15 +138,10 @@ export async function logout(req, res) {
       });
     }
 
-    return res
-      .status(200)
-      .clearCookie("token", {
-        httpOnly: true,
-      })
-      .json({
-        success: true,
-        message: "User logged out successfully",
-      });
+    return res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -156,66 +151,6 @@ export async function logout(req, res) {
     });
   }
 }
-
-// export async function refreshAccessToken(req, res) {
-//   const incomingRefreshToken =
-//     req.cookies?.refreshToken || req.body.refreshToken;
-
-//   if (!incomingRefreshToken) {
-//     return res.satus(400).json({
-//       success: false,
-//       message: "unauthorized request",
-//     });
-//   }
-//   try {
-//     const decodeToken = jwt.verify(
-//       incomingRefreshToken,
-//       process.env.REFRESH_TOKEN_SECRET
-//     );
-
-//     const user = await userModel.findById(decodeToken?._id);
-
-//     if (!user) {
-//       return res.satus(400).json({
-//         success: false,
-//         message: "invalid refresh token",
-//       });
-//     }
-
-//     if (incomingRefreshToken !== user?.refreshToken) {
-//       return res.satus(400).json({
-//         success: false,
-//         message: "refresh token is expired or used",
-//       });
-//     }
-
-//     const { accessToken, newrefreshToken } =
-//       await generateAccessTokenAndRefreshToken(user._id);
-
-//     return res
-//       .status(200)
-//       .cookie("accessToken", accessToken, {
-//         httpOnly: true,
-//         secure: true,
-//       })
-//       .cookie("refreshToken", newrefreshToken, {
-//         httpOnly: true,
-//         secure: true,
-//       })
-//       .json(
-//         new ApiResponse(
-//           200,
-//           {
-//             accessToken,
-//             refreshToken: newrefreshToken,
-//           },
-//           "Access token refreshed"
-//         )
-//       );
-//   } catch (error) {
-//     throw new ApiError(401, error?.message || "Invalid refresh token");
-//   }
-// }
 
 export async function verifyUserEmail(req, res) {
   const { userId, otp } = req.body;

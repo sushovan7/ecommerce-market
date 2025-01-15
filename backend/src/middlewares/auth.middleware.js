@@ -31,7 +31,7 @@ export async function auth(req, res, next) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Invalid access token",
+      message: "Invalid token",
       error,
     });
   }
