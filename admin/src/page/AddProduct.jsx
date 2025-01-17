@@ -4,14 +4,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 function AddProduct() {
-  const [productName, setProductName] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productCategory, setProductCategory] = useState("men");
-  const [productSubCategory, setProductSubCategory] = useState("topwear");
-  const [productPrice, setProductPrice] = useState("");
-  const [productSize, setProductSize] = useState([]);
+  const [name, setProductName] = useState("");
+  const [description, setProductDescription] = useState("");
+  const [category, setProductCategory] = useState("men");
+  const [subCategory, setProductSubCategory] = useState("topwear");
+  const [price, setProductPrice] = useState("");
+  const [sizes, setProductSize] = useState([]);
   const [bestseller, setBestseller] = useState(false);
-
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
@@ -19,38 +18,50 @@ function AddProduct() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!productName || !productDescription || !productPrice) {
+    if (!name || !description || !price) {
       alert("Please fill in all required fields.");
       return;
     }
-    const productData = {
-      productName,
-      productDescription,
-      productCategory,
-      productSubCategory,
-      productPrice,
-      productSize,
-      bestseller,
-    };
+    const productData = new FormData();
+    productData.append("name", name);
+    productData.append("description", description);
+    productData.append("category", category);
+    productData.append("subCategory", subCategory);
+    productData.append("price", price);
+    productData.append("sizes", JSON.stringify(sizes));
+    productData.append("bestseller", bestseller);
 
+    image1 && productData.append("image1", image1);
+    image2 && productData.append("image2", image2);
+    image3 && productData.append("image3", image3);
+    image4 && productData.append("image4", image4);
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/admin/add-product`,
-        productData
+        `${import.meta.env.VITE_BACKEND_URL}/product/add-product`,
+        productData,
+        {
+          headers: {
+            token: localStorage.getItem("adminToken"),
+          },
+        }
       );
       if (response.data.success) {
         toast.success("Product added successfully!");
+        setProductName("");
+        setProductDescription("");
+        setProductCategory("men");
+        setProductSubCategory("topwear");
+        setProductPrice("");
+        setProductSize([]);
+        setBestseller(false);
+        setImage1(false);
+        setImage2(false);
+        setImage3(false);
+        setImage4(false);
       }
     } catch (error) {
       console.error("Error adding product:", error);
       toast.error("Error adding product");
-      setProductName("");
-      setProductDescription("");
-      setProductCategory("men");
-      setProductSubCategory("topwear");
-      setProductPrice("");
-      setProductSize([]);
-      setBestseller(false);
     }
   }
   useEffect(() => {
@@ -137,7 +148,7 @@ function AddProduct() {
         <input
           required
           type="text"
-          value={productName}
+          value={name}
           onChange={(e) => setProductName(e.target.value)}
           placeholder="Product name"
           className="border outline-none px-3 py-3 text-lg"
@@ -148,7 +159,7 @@ function AddProduct() {
         <textarea
           required
           type="text"
-          value={productDescription}
+          value={description}
           onChange={(e) => setProductDescription(e.target.value)}
           placeholder="Product description"
           className="border outline-none px-3 py-3 text-lg"
@@ -183,7 +194,7 @@ function AddProduct() {
           <h1 className=" font-semibold">Product price:</h1>
           <input
             type="number"
-            value={productPrice}
+            value={price}
             onChange={(e) => setProductPrice(e.target.value)}
             placeholder="20"
             className="border outline-none px-2 py-2"
@@ -205,7 +216,7 @@ function AddProduct() {
                 }
                 key={i}
                 className={`px-3 py-2 cursor-pointer ${
-                  productSize.includes(item)
+                  sizes.includes(item)
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200"
                 }`}
