@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from "react";
-import { products } from "../assets/assets";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -20,6 +19,24 @@ function ShopContextProvider(props) {
     const storedCart = localStorage.getItem("cartItems");
     return storedCart ? JSON.parse(storedCart) : {};
   });
+
+  const [products, setProducts] = useState([]);
+
+  async function getProducts() {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/product/list-products`
+      );
+      if (response.data.success) {
+        setProducts(response.data.products);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -93,7 +110,7 @@ function ShopContextProvider(props) {
     const token = localStorage.getItem("token") || "";
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/auth/logout`,
+        `http://localhost:3000/api/v1/user/logout`,
         {
           headers: {
             token: token,
@@ -105,6 +122,10 @@ function ShopContextProvider(props) {
         toast.success("Logout successful");
         navigate("/");
         setIsLoggedIn(false);
+        localStorage.setItem("isLoggedIn", false);
+        localStorage.removeItem("token");
+
+        setCartItems({});
       }
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);
@@ -113,7 +134,6 @@ function ShopContextProvider(props) {
   }
 
   const value = {
-    products,
     currencyType,
     showSearchBar,
     setShowSearchBar,
@@ -131,8 +151,9 @@ function ShopContextProvider(props) {
     handleLogout,
     isLoggedIn,
     setIsLoggedIn,
+    products,
   };
-
+  console.log(products);
   return (
     <shopContext.Provider value={value}>{props.children}</shopContext.Provider>
   );

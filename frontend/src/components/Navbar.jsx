@@ -59,21 +59,34 @@ function Navbar() {
             />
           )}
 
-          <div className="absolute hidden  pt-4   group-hover:block top-0 -right-5">
-            <div className="flex rounded shadow-lg flex-col gap-4 bg-gray-100 px-4 py-2 mt-4">
-              <Link className="hover:text-black" to={"/login"}>
-                Login
-              </Link>
-              <Link className="hover:text-black" to={"/orders"}>
-                Orders
-              </Link>
-              <Link
-                onClick={handleLogout}
-                className="hover:text-black"
-                to={"/"}
-              >
-                Logout
-              </Link>
+          <div className="absolute hidden py-6  w-[10vw] pt-4 group-hover:block top-0 -right-5">
+            <div className="flex  rounded shadow-lg flex-col gap-4 bg-gray-100 px-4 py-2 mt-4">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    className="hover:text-black hover:bg-gray-300 px-3 py-2"
+                    to={"/orders"}
+                  >
+                    Orders
+                  </Link>{" "}
+                  <Link
+                    onClick={handleLogout}
+                    className="hover:text-black hover:bg-gray-300 px-3 py-2"
+                    to={"/"}
+                  >
+                    Logout
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    className="hover:text-black hover:bg-gray-300 px-3 py-2"
+                    to={"/login"}
+                  >
+                    Login
+                  </Link>{" "}
+                </>
+              )}
             </div>
           </div>
         </div>

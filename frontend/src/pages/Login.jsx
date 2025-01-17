@@ -27,7 +27,7 @@ function Login() {
   async function onSubmit({ email, password }) {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_API_BASE_URL}/auth/signin`,
+        `${import.meta.env.VITE_BACKEND_URL}/user/signin`,
         {
           email,
           password,
@@ -38,6 +38,8 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("isLoggedIn", false);
         toast.success("User loggedin successfully");
+
+        localStorage.setItem("isLoggedIn", true);
         setIsLoggedIn(true);
         navigate("/");
       } else {

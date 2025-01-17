@@ -7,7 +7,7 @@ function LatestCollections() {
   const { products } = useContext(shopContext);
   const [latestProducts, setLatestProducts] = useState([]);
 
-  useEffect(() => setLatestProducts(() => products.slice(10, 20)), []);
+  useEffect(() => setLatestProducts(() => products.slice(10, 20)), [products]);
 
   return (
     <div className="text-gray-800 mt-20">
@@ -33,7 +33,7 @@ function LatestCollections() {
             return (
               <Card
                 key={item._id}
-                productImg={item.image[0]}
+                productImg={item.images?.[0]}
                 productTitle={item.name}
                 price={item.price}
                 id={item._id}

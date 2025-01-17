@@ -12,17 +12,20 @@ function Filters() {
   const [sortBy, setSortBy] = useState("relavent");
 
   function toggleCategory(e) {
-    if (category.includes(e.target.value)) {
-      setCategory(category.filter((item) => item !== e.target.value));
+    const value = e.target.value.toLowerCase();
+    console.log(value);
+    if (category.includes(value)) {
+      setCategory(category.filter((item) => item !== value));
     } else {
-      setCategory((prev) => [...prev, e.target.value]);
+      setCategory((prev) => [...prev, value]);
     }
   }
   function toggleSubCategory(e) {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory(subCategory.filter((item) => item !== e.target.value));
+    const value = e.target.value.toLowerCase();
+    if (subCategory.includes(value)) {
+      setSubCategory(subCategory.filter((item) => item !== value));
     } else {
-      setSubCategory((prev) => [...prev, e.target.value]);
+      setSubCategory((prev) => [...prev, value]);
     }
   }
 
@@ -75,7 +78,7 @@ function Filters() {
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory, inputValue]);
+  }, [category, subCategory, inputValue, products]);
 
   useEffect(() => sortProducts(), [sortBy]);
 
@@ -168,7 +171,7 @@ function Filters() {
                 return (
                   <Card
                     key={item._id}
-                    productImg={item.image[0]}
+                    productImg={item.images?.[0]}
                     productTitle={item.name}
                     price={item.price}
                     id={item._id}

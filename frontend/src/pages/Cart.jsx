@@ -44,6 +44,10 @@ function Cart() {
     }
   }, [cartItems, products]);
 
+  if (!products || !cartItems || products.length === 0) {
+    return <div>Loading your cart...</div>;
+  }
+
   return (
     <div className="w-full ">
       <hr className="w-full h-[1px] text-gray-600 mb-10" />
@@ -55,6 +59,7 @@ function Cart() {
             const productData = products.find(
               (product) => product._id === item._id
             );
+            console.log(productData);
             return (
               <div
                 key={index}
@@ -62,7 +67,7 @@ function Cart() {
               >
                 <div className="flex w-[80%] relative items-center gap-3 max-h-[8vh] sm:max-h-[20] ">
                   <img
-                    src={productData.image?.[0]}
+                    src={productData.images?.[0]}
                     alt="image"
                     className="h-full"
                   />

@@ -17,7 +17,7 @@ function BestSellers() {
           })
           .slice(0, 5)
       ),
-    []
+    [products]
   );
 
   return (
@@ -38,7 +38,7 @@ function BestSellers() {
             return (
               <Card
                 key={item._id}
-                productImg={item.image[0]}
+                productImg={item.images?.[0]}
                 productTitle={item.name}
                 price={item.price}
                 id={item._id}
