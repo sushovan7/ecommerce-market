@@ -33,6 +33,6 @@ productRouter.post(
   ]),
   addProduct
 );
-productRouter.get("/list-products", adminAuth, listProducts);
+productRouter.get("/list-products", listProducts);
 productRouter.post("/remove-product", adminAuth, removeProduct);
-productRouter.get("/single-product", adminAuth, singleProduct);
+productRouter.get("/single-product", singleProduct);

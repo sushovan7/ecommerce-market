@@ -92,8 +92,9 @@ export async function listProducts(req, res) {
 }
 
 export async function removeProduct(req, res) {
+  console.log(req.body.id);
   try {
-    await productModel.findByIdAndDelete(req.body._id);
+    await productModel.findByIdAndDelete(req.body.id);
     return res.status(200).json({
       success: true,
       message: "Product deleted",
