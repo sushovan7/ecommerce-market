@@ -8,6 +8,7 @@ import { connectDb } from "./DB/db.js";
 import { userRouter } from "./routes/user.routes.js";
 import { productRouter } from "./routes/product.routes.js";
 import { adminRouter } from "./routes/admin.routes.js";
+import { cartRouter } from "./routes/cart.routes.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(urlencoded({ extended: true, limit: "50mb" }));
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/cart", cartRouter);
 
 connectDb()
   .then(() => {
