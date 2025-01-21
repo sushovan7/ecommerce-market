@@ -59,7 +59,6 @@ function Cart() {
             const productData = products.find(
               (product) => product._id === item._id
             );
-            console.log(productData);
             return (
               <div
                 key={index}

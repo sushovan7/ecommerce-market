@@ -61,7 +61,7 @@ function ShopContextProvider(props) {
     }
   }
 
-  function addToCart(productId, size) {
+  async function addToCart(productId, size) {
     if (!size) {
       toast.error("Please select size!");
       return null;
@@ -78,33 +78,87 @@ function ShopContextProvider(props) {
       cartData[productId][size] = 1;
     }
     setCartItems(cartData);
-    toast.success("Item added to Cart");
+    if (isLoggedIn) {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/cart/add-to-cart`,
+        { productId, size },
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+      toast.success("Item added to Cart");
+    }
   }
 
   function getCartCount() {
     let totalCount = 0;
 
-    for (const items in cartItems) {
-      for (const item in cartItems[items]) {
+    for (const productId in cartItems) {
+      for (const size in cartItems[productId]) {
         try {
-          if (cartItems[items][item] > 0) {
-            totalCount = totalCount + cartItems[items][item];
-          } else {
-            totalCount = cartItems[items][item];
+          const quantity = cartItems[productId][size];
+          if (quantity > 0) {
+            totalCount += quantity; // Accumulate positive quantities
           }
         } catch (error) {
-          console.log(error);
+          console.error("Error processing cart item:", error);
         }
       }
     }
+
+    console.log("Cart count:", totalCount);
     return totalCount;
   }
 
-  function updateQuantity(productId, size, quantity) {
+  async function updateQuantity(productId, size, quantity) {
+    console.log(productId, size, quantity);
     let cartData = structuredClone(cartItems);
     cartData[productId][size] = quantity;
     setCartItems(cartData);
+    try {
+      if (isLoggedIn) {
+        await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/cart/update-cart`,
+          { productId, size, quantity },
+          {
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+        toast.success("Item updated");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   }
+
+  async function getUserCartdata() {
+    try {
+      if (isLoggedIn) {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/cart/get-cartdata`,
+          {
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+        if (response.data.success) {
+          setCartItems(response.data.cartData);
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      getUserCartdata();
+    }
+  }, [isLoggedIn]);
 
   async function handleLogout() {
     const token = localStorage.getItem("token") || "";
@@ -153,7 +207,7 @@ function ShopContextProvider(props) {
     setIsLoggedIn,
     products,
   };
-  console.log(products);
+
   return (
     <shopContext.Provider value={value}>{props.children}</shopContext.Provider>
   );
