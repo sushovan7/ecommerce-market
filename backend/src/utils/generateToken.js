@@ -11,7 +11,7 @@ export async function generateToken(_id) {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "15d",
+        expiresIn: "100d",
       }
     );
 

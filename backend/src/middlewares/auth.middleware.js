@@ -28,6 +28,11 @@ export async function auth(req, res, next) {
     req.user = user;
     next();
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ message: "Session expired. Please log in again." });
+    }
     console.log(error);
     return res.status(500).json({
       success: false,
