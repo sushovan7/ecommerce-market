@@ -100,7 +100,7 @@ function ShopContextProvider(props) {
         try {
           const quantity = cartItems[productId][size];
           if (quantity > 0) {
-            totalCount += quantity; // Accumulate positive quantities
+            totalCount += quantity;
           }
         } catch (error) {
           console.error("Error processing cart item:", error);

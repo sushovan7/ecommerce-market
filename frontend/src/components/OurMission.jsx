@@ -1,4 +1,3 @@
-import React from "react";
 import { assets } from "../assets/assets";
 import Title from "./Title";
 function OurMission() {
@@ -28,7 +27,7 @@ function OurMission() {
             comfort of their homes.
           </p>
           <p>
-            Since our inception, we've worked tirelessly to curate a diverse
+            Since our inception, weve worked tirelessly to curate a diverse
             selection of high-quality products that cater to every taste and
             preference. From fashion and beauty to electronics and home
             essentials, we offer an extensive collection sourced from trusted
