@@ -7,7 +7,6 @@ import Footer from "../components/Footer";
 import NewsLetter from "../components/NewsLetter";
 import Title from "../components/Title";
 import { shopContext } from "../context/ShopContext";
-import { Loader2 } from "lucide-react";
 
 function PlaceOrder() {
   const [method, setMethod] = useState("cod");
