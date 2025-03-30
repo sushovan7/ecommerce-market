@@ -18,7 +18,6 @@ function Navbar() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         localStorage.removeItem("adminToken");
         toast.success("Logout successfully");
@@ -30,20 +29,14 @@ function Navbar() {
   }
 
   return (
-    <nav className="flex h-[10vh] px-10  border-b w-screen text-gray-800 items-center justify-between">
+    <nav className="h-16 px-4 sm:px-6 border-b w-full flex items-center justify-between bg-white sticky top-0 z-10">
       <Link to={"/"}>
-        <img src={logo} alt="main-logo" className="sm:w-40 w-36" />
+        <img src={logo} alt="main-logo" className="w-36 sm:w-40" />
       </Link>
-      <div className="flex items-center gap-3">
-        <Link
-          to="/login"
-          className="px-6 py-2 rounded-full text-white  bg-gray-700 hover:bg-gray-500"
-        >
-          Signin
-        </Link>
+      <div className="flex items-center gap-2 sm:gap-3">
         <button
           onClick={handleLogout}
-          className="px-6 py-2 rounded-full text-white  bg-gray-700 hover:bg-gray-500"
+          className="px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-white bg-gray-900 hover:bg-gray-700 text-sm sm:text-base"
         >
           Logout
         </button>

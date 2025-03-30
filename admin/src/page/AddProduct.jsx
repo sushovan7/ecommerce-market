@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import uploadImg from "../assets/uploadimg.png";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ function AddProduct() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!name || !description || !price) {
-      alert("Please fill in all required fields.");
+      toast.error("Please fill in all required fields.");
       return;
     }
     const productData = new FormData();
@@ -64,6 +64,7 @@ function AddProduct() {
       toast.error("Error adding product");
     }
   }
+
   useEffect(() => {
     return () => {
       image1 && URL.revokeObjectURL(image1);
@@ -76,172 +77,198 @@ function AddProduct() {
   return (
     <form
       onSubmit={handleSubmit}
-      className=" flex flex-col gap-4 text-gray-600"
+      className="max-w-4xl mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-6 text-gray-700"
     >
-      <div className="flex flex-col gap-3">
-        <h1 className=" font-semibold">Upload image:</h1>
-        <div className="flex items-center gap-2">
-          <label htmlFor="image1">
-            <img
-              width="70px"
-              height="70px"
-              src={!image1 ? uploadImg : URL.createObjectURL(image1)}
-              alt=""
-              className="object-cover"
-            />{" "}
-            <input
-              onChange={(e) => setImage1(e.target.files[0])}
-              type="file"
-              id="image1"
-              hidden
-            />
-          </label>
-          <label htmlFor="image2">
-            <img
-              width="70px"
-              height="70px"
-              src={!image2 ? uploadImg : URL.createObjectURL(image2)}
-              alt=""
-              className=" object-cover"
-            />{" "}
-            <input
-              onChange={(e) => setImage2(e.target.files[0])}
-              type="file"
-              id="image2"
-              hidden
-            />
-          </label>
-          <label htmlFor="image3">
-            <img
-              width="70px"
-              height="70px"
-              src={!image3 ? uploadImg : URL.createObjectURL(image3)}
-              alt=""
-              className=" object-cover"
-            />{" "}
-            <input
-              onChange={(e) => setImage3(e.target.files[0])}
-              type="file"
-              id="image3"
-              hidden
-            />
-          </label>
-          <label htmlFor="image4">
-            <img
-              width="70px"
-              height="70px"
-              src={!image4 ? uploadImg : URL.createObjectURL(image4)}
-              alt=""
-              className=" object-cover"
-            />{" "}
-            <input
-              onChange={(e) => setImage4(e.target.files[0])}
-              type="file"
-              id="image4"
-              hidden
-            />
-          </label>
+      {/* Image Upload Section */}
+      <div className="flex flex-col gap-4">
+        <h1 className="text-lg font-semibold">Upload images:</h1>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map((num) => {
+            const imageState =
+              num === 1
+                ? image1
+                : num === 2
+                ? image2
+                : num === 3
+                ? image3
+                : image4;
+            const setImage =
+              num === 1
+                ? setImage1
+                : num === 2
+                ? setImage2
+                : num === 3
+                ? setImage3
+                : setImage4;
+
+            return (
+              <label
+                key={num}
+                htmlFor={`image${num}`}
+                className="cursor-pointer"
+              >
+                <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden hover:border-gray-400 transition-colors">
+                  {!imageState ? (
+                    <img
+                      src={uploadImg}
+                      alt="Upload placeholder"
+                      className="w-full h-full object-contain p-4"
+                    />
+                  ) : (
+                    <img
+                      src={URL.createObjectURL(imageState)}
+                      alt={`Preview ${num}`}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+                <input
+                  onChange={(e) => setImage(e.target.files[0])}
+                  type="file"
+                  id={`image${num}`}
+                  className="hidden"
+                  accept="image/*"
+                />
+              </label>
+            );
+          })}
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <h1 className=" font-semibold">Product name:</h1>
+
+      {/* Product Name */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="name" className="text-lg font-semibold">
+          Product name:
+        </label>
         <input
           required
           type="text"
+          id="name"
           value={name}
           onChange={(e) => setProductName(e.target.value)}
-          placeholder="Product name"
-          className="border outline-none px-3 py-3 text-lg"
+          placeholder="Enter product name"
+          className="border border-gray-300 rounded-md outline-none px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-      <div className="flex flex-col gap-3">
-        <h1 className=" font-semibold">Product description:</h1>
+
+      {/* Product Description */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="description" className="text-lg font-semibold">
+          Product description:
+        </label>
         <textarea
           required
-          type="text"
+          id="description"
           value={description}
           onChange={(e) => setProductDescription(e.target.value)}
-          placeholder="Product description"
-          className="border outline-none px-3 py-3 text-lg"
+          placeholder="Enter product description"
+          rows={4}
+          className="border border-gray-300 rounded-md outline-none px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-      <div className="flex items-center justify-center  gap-8">
-        <div className="flex flex-col  gap-3">
-          <h1 className=" font-semibold">Product category:</h1>
+
+      {/* Category, Subcategory, Price */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="category" className="text-lg font-semibold">
+            Category:
+          </label>
           <select
             required
+            id="category"
+            value={category}
             onChange={(e) => setProductCategory(e.target.value)}
-            className="outline-none border px-2 py-2"
+            className="border border-gray-300 rounded-md outline-none px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="men">Men</option>
             <option value="women">Women</option>
             <option value="kids">Kids</option>
           </select>
         </div>
-        <div className="flex flex-col gap-3">
-          <h1 className=" font-semibold">Product sub-category:</h1>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="subCategory" className="text-lg font-semibold">
+            Sub-category:
+          </label>
           <select
             required
+            id="subCategory"
+            value={subCategory}
             onChange={(e) => setProductSubCategory(e.target.value)}
-            className="outline-none border px-2 py-2"
+            className="border border-gray-300 rounded-md outline-none px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="topwear">Topwear</option>
             <option value="bottomwear">Bottomwear</option>
-            <option value="winterwear">Witerwear</option>
+            <option value="winterwear">Winterwear</option>
           </select>
         </div>
-        <div className="flex flex-col gap-3">
-          <h1 className=" font-semibold">Product price:</h1>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="price" className="text-lg font-semibold">
+            Price ($):
+          </label>
           <input
+            required
             type="number"
+            id="price"
             value={price}
             onChange={(e) => setProductPrice(e.target.value)}
-            placeholder="20"
-            className="border outline-none px-2 py-2"
+            placeholder="Enter price"
+            min="0"
+            step="0.01"
+            className="border border-gray-300 rounded-md outline-none px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <h1 className=" font-semibold">Product size:</h1>
-        <div className="flex items-center gap-2">
-          {["S", "M", "L", "XL", "XXL"].map((item, i) => {
-            return (
-              <div
-                onClick={() =>
-                  setProductSize((prev) =>
-                    prev.includes(item)
-                      ? prev.filter((size) => size !== item)
-                      : [...prev, item]
-                  )
-                }
-                key={i}
-                className={`px-3 py-2 cursor-pointer ${
-                  sizes.includes(item)
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {item}
-              </div>
-            );
-          })}
+
+      {/* Size Selection */}
+      <div className="flex flex-col gap-2">
+        <label className="text-lg font-semibold">Available sizes:</label>
+        <div className="flex flex-wrap gap-2">
+          {["S", "M", "L", "XL", "XXL"].map((item) => (
+            <button
+              type="button"
+              onClick={() =>
+                setProductSize((prev) =>
+                  prev.includes(item)
+                    ? prev.filter((size) => size !== item)
+                    : [...prev, item]
+                )
+              }
+              key={item}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                sizes.includes(item)
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
         </div>
       </div>
-      <div className="flex  gap-3">
-        <h1 className=" font-semibold">Add to bestseller:</h1>
+
+      {/* Bestseller Checkbox */}
+      <div className="flex items-center gap-3">
         <input
           type="checkbox"
+          id="bestseller"
           checked={bestseller}
           onChange={() => setBestseller((prev) => !prev)}
-          className="w-5 h-5"
+          className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
         />
+        <label htmlFor="bestseller" className="text-lg font-semibold">
+          Mark as bestseller
+        </label>
       </div>
-      <div className="flex items-center ">
+
+      {/* Submit Button */}
+      <div className="mt-4">
         <button
           type="submit"
-          className="bg-gray-900 rounded-lg text-lg font-bold text-white px-12 py-4"
+          className="w-full md:w-auto bg-gray-900 hover:bg-gray-800 rounded-lg text-lg font-bold text-white px-8 py-3 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
         >
-          Add
+          Add Product
         </button>
       </div>
     </form>

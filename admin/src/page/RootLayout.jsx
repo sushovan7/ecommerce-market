@@ -5,16 +5,15 @@ import Sidebar from "../components/Sidebar";
 
 function RootLayout() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex w-screen gap-4">
+      <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar />
-        <div className="px-10 py-6">
-          {" "}
+        <main className="flex-1 p-4 md:p-6 overflow-auto">
           <Outlet />
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 }
 
