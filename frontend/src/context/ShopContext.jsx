@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -108,7 +108,6 @@ function ShopContextProvider(props) {
       }
     }
 
-    console.log("Cart count:", totalCount);
     return totalCount;
   }
 
@@ -196,6 +195,7 @@ function ShopContextProvider(props) {
     inputValue,
     setInputValue,
     cartItems,
+    setCartItems,
     addToCart,
     getCartCount,
     updateQuantity,
@@ -206,6 +206,7 @@ function ShopContextProvider(props) {
     isLoggedIn,
     setIsLoggedIn,
     products,
+    navigate,
   };
 
   return (

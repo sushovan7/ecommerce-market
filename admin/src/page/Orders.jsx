@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  console.log(orders);
 
   async function allOrders() {
     try {
@@ -16,7 +17,7 @@ function Orders() {
           },
         }
       );
-      setOrders(response.data.orders);
+      setOrders(response.data.orders.reverse());
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("Failed to load orders");

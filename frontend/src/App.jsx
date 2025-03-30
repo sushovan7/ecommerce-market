@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
@@ -16,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import Signup from "./pages/signup";
 import PasswordReset from "./pages/PasswordReset";
 import ResetPasswordOtp from "./pages/ResetPasswordOtp";
+import Verify from "./pages/Verify";
 
 function App() {
   return (
@@ -36,6 +36,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="reset-password-otp" element={<ResetPasswordOtp />} />
           <Route path="reset-password" element={<PasswordReset />} />
+          <Route path="verify" element={<Verify />} />
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>

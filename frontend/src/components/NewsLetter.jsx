@@ -3,7 +3,7 @@ import React from "react";
 function NewsLetter() {
   return (
     <div className="w-full py-2 mt-20 flex flex-col  gap-2 items-center  ">
-      <div className="text-2xl font-bold text-gray-800">
+      <div className="text-2xl text-center font-bold text-gray-800">
         <h1 className="font-mono tracking-tighter">
           Subscribe now & get 10% off
         </h1>
