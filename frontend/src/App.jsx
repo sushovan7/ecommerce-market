@@ -12,7 +12,7 @@ import Login from "./pages/Login";
 import ProductDetails from "./pages/ProductDetails";
 import ScrollTop from "./utils/ScrollTop";
 import { Toaster } from "react-hot-toast";
-import Signup from "./pages/signup";
+import Signup from "./pages/Signup";
 import PasswordReset from "./pages/PasswordReset";
 import ResetPasswordOtp from "./pages/ResetPasswordOtp";
 import Verify from "./pages/Verify";
