@@ -1,15 +1,16 @@
-import React from "react";
 import Title from "../components/Title";
 import Button from "../components/Button";
 import { useForm } from "react-hook-form";
 import { emailRegex, passwordRegex } from "../utils/validation";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
+import { useContext } from "react";
+import { shopContext } from "../context/ShopContext";
 
-function signup() {
-  const navigate = useNavigate();
+function Signup() {
+  const { navigate } = useContext(shopContext);
   const {
     register,
     formState: { errors, isSubmitting },
@@ -120,4 +121,4 @@ function signup() {
   );
 }
 
-export default signup;
+export default Signup;
