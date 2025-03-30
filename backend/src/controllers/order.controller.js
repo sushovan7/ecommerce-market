@@ -4,7 +4,7 @@ import { userModel } from "../models/user.model.js";
 export async function placeOrder(req, res) {
   try {
     const { orderData } = req.body;
-    const { items, amount, address } = orderData;
+    const { items, amount, address, phone } = orderData;
     console.log(items, amount, address);
 
     const userId = req.user._id;
@@ -13,6 +13,7 @@ export async function placeOrder(req, res) {
       items,
       amount,
       address,
+      phone,
       paymentMethod: "cod",
       payment: false,
     };
@@ -40,7 +41,21 @@ export async function placeOrder(req, res) {
 
 export async function placeOrderStripe() {}
 
-export async function allOrders() {}
+export async function allOrders(req, res) {
+  try {
+    const orders = await orderModel.find({});
+    return res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "failed to fetch orders",
+      error: error.message,
+    });
+  }
+}
 
 export async function userOrders(req, res) {
   try {

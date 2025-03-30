@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
-    amount: {
+    phone: {
       type: Number,
       required: true,
     },
