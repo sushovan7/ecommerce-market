@@ -35,14 +35,28 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 
-connectDb()
-  .then(() => {
-    if (process.env.NODE_ENV !== "production") {
+// connectDb()
+//   .then(() => {
+//     if (process.env.NODE_ENV !== "production") {
+//       app.listen(process.env.PORT || 8000, () => {
+//         console.log("Server running on port:", process.env.PORT || 8000);
+//       });
+//     }
+//   })
+//   .catch((err) => {
+//     console.log("mongodb connection error: ", err);
+//   });
+
+export default app;
+
+if (process.env.NODE_ENV !== "production") {
+  connectDb()
+    .then(() => {
       app.listen(process.env.PORT || 8000, () => {
         console.log("Server running on port:", process.env.PORT || 8000);
       });
-    }
-  })
-  .catch((err) => {
-    console.log("mongodb connection error: ", err);
-  });
+    })
+    .catch((err) => {
+      console.log("MongoDB connection error:", err);
+    });
+}
