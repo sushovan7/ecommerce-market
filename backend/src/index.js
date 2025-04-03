@@ -37,9 +37,11 @@ app.use("/api/v1/order", orderRouter);
 
 connectDb()
   .then(() => {
-    app.listen(process.env.PORT || 8000, function () {
-      console.log("app is listening on port :", process.env.PORT);
-    });
+    if (process.env.NODE_ENV !== "production") {
+      app.listen(process.env.PORT || 8000, () => {
+        console.log("Server running on port:", process.env.PORT || 8000);
+      });
+    }
   })
   .catch((err) => {
     console.log("mongodb connection error: ", err);
