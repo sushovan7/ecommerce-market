@@ -15,7 +15,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://ecommercemarketadmin.vercel.app", // admin URL
+      process.env.FRONTEND_URL,
+      process.env.ADMIN_URL,
       "http://localhost:5173",
       "http://localhost:5174",
     ],
@@ -39,28 +40,26 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 
-// connectDb()
-//   .then(() => {
-//     if (process.env.NODE_ENV !== "production") {
+connectDb()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log("Server running on port:", process.env.PORT || 8000);
+    });
+  })
+  .catch((err) => {
+    console.log("mongodb connection error: ", err);
+  });
+
+// export default app;
+
+// if (process.env.NODE_ENV !== "production") {
+//   connectDb()
+//     .then(() => {
 //       app.listen(process.env.PORT || 8000, () => {
 //         console.log("Server running on port:", process.env.PORT || 8000);
 //       });
-//     }
-//   })
-//   .catch((err) => {
-//     console.log("mongodb connection error: ", err);
-//   });
-
-export default app;
-
-if (process.env.NODE_ENV !== "production") {
-  connectDb()
-    .then(() => {
-      app.listen(process.env.PORT || 8000, () => {
-        console.log("Server running on port:", process.env.PORT || 8000);
-      });
-    })
-    .catch((err) => {
-      console.log("MongoDB connection error:", err);
-    });
-}
+//     })
+//     .catch((err) => {
+//       console.log("MongoDB connection error:", err);
+//     });
+// }
