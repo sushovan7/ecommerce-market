@@ -12,6 +12,8 @@ import { cartRouter } from "./routes/cart.routes.js";
 import { orderRouter } from "./routes/order.routes.js";
 
 const app = express();
+
+// Middleware
 app.use(
   cors({
     origin: [
@@ -25,14 +27,14 @@ app.use(
   })
 );
 
-app.use(
-  express.json({
-    limit: "16kb",
-  })
-);
-
+app.use(express.json({ limit: "16kb" }));
 app.use(cookieParser());
 app.use(urlencoded({ extended: true, limit: "50mb" }));
+
+// Routes
+app.get("/", (req, res) => {
+  res.json({ message: "E-commerce API is running" });
+});
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
@@ -40,12 +42,18 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 
-connectDb()
-  .then(() => {
-    app.listen(process.env.PORT || 8000, () => {
-      console.log("Server running on port:", process.env.PORT || 8000);
-    });
-  })
-  .catch((err) => {
-    console.log("mongodb connection error: ", err);
-  });
+// Vercel-specific export
+export default async (req, res) => {
+  await connectDb(); // Ensure DB connection
+  return app(req, res); // Forward to Express
+};
+
+// connectDb()
+//   .then(() => {
+//     app.listen(process.env.PORT || 8000, () => {
+//       console.log("Server running on port:", process.env.PORT || 8000);
+//     });
+//   })
+//   .catch((err) => {
+//     console.log("mongodb connection error: ", err);
+//   });
