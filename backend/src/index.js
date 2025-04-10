@@ -16,12 +16,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: [
-      process.env.FRONTEND_URL,
-      process.env.ADMIN_URL,
-      "http://localhost:5173",
-      "http://localhost:5174",
-    ],
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -43,17 +38,17 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 
 // Vercel-specific export
-export default async (req, res) => {
-  await connectDb(); // Ensure DB connection
-  return app(req, res); // Forward to Express
-};
+// export default async (req, res) => {
+//   await connectDb(); // Ensure DB connection
+//   return app(req, res); // Forward to Express
+// };
 
-// connectDb()
-//   .then(() => {
-//     app.listen(process.env.PORT || 8000, () => {
-//       console.log("Server running on port:", process.env.PORT || 8000);
-//     });
-//   })
-//   .catch((err) => {
-//     console.log("mongodb connection error: ", err);
-//   });
+connectDb()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log("Server running on port:", process.env.PORT || 8000);
+    });
+  })
+  .catch((err) => {
+    console.log("mongodb connection error: ", err);
+  });
