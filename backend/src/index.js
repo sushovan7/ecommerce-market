@@ -15,19 +15,8 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 console.log(process.env);
-// Middleware
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5173",
-      process.env.FRONTEND_URL,
-      process.env.ADMIN_URL,
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+
+app.use(cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE"] }));
 
 app.use(express.json({ limit: "16kb" }));
 app.use(cookieParser());
