@@ -14,14 +14,16 @@ import { orderRouter } from "./routes/order.routes.js";
 const app = express();
 const port = process.env.PORT || 8000;
 
+console.log(process.env);
 // Middleware
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      process.env.FRONTEND_URL,
-      process.env.ADMIN_URL,
+      process.env.FRONTEND_URL ||
+        "https://ecommercefrontend-liart-gamma.vercel.app",
+      process.env.ADMIN_URL || "https://ecommercemarketadmin.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
