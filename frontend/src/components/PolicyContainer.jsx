@@ -1,4 +1,3 @@
-import React from "react";
 import Policy from "./Policy";
 import { assets } from "../assets/assets";
 

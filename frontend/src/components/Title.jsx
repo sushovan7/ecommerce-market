@@ -1,5 +1,3 @@
-import React from "react";
-
 function Title({ text1, text2, className }) {
   return (
     <div className="flex items-center gap-2">

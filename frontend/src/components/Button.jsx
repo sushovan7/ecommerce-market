@@ -1,5 +1,3 @@
-import React from "react";
-
 function Button({ onClick, text, type, disabled }) {
   return (
     <button

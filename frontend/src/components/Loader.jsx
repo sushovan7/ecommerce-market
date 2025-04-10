@@ -1,5 +1,3 @@
-import React from "react";
-
 function Loader({
   size = "w-12 h-12",
   color = "border-blue-500",

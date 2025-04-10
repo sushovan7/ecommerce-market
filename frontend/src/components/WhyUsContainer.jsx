@@ -1,4 +1,3 @@
-import React from "react";
 import WhyUs from "./WhyUs";
 
 function WhyUsContainer() {

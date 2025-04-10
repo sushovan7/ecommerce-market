@@ -1,5 +1,3 @@
-import React from "react";
-
 function NewsLetter() {
   return (
     <div className="w-full py-2 mt-20 flex flex-col  gap-2 items-center  ">

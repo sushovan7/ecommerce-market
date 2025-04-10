@@ -4,7 +4,6 @@ import Title from "../components/Title";
 import Footer from "../components/Footer";
 import NewsLetter from "../components/NewsLetter";
 import axios from "axios";
-import { allOrders } from "../../../backend/src/controllers/order.controller";
 
 function Orders() {
   const { currencyType } = useContext(shopContext);

@@ -1,5 +1,3 @@
-import React from "react";
-
 function Policy({ policyIcon, policyTitle, policyDescription }) {
   return (
     <div>
